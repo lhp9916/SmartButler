@@ -17,6 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--设置-->
+        <activity
+            android:name=".ui.SettingActivity"
+            android:label="@string/text_setting" />
     </application>
 
 </manifest>
