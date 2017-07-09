@@ -12,11 +12,13 @@
         android:src="@mipmap/ic_launcher" />
 
     <EditText
+        android:id="@+id/et_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="用户名" />
 
     <EditText
+        android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="密码"
@@ -37,6 +39,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
