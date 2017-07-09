@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import lhp.com.smartbutler.MainActivity;
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.utils.ShareUtils;
 import lhp.com.smartbutler.utils.StaticClass;
@@ -43,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
                     if (isFirst()) {
                         startActivity(new Intent(SplashActivity.this, GuideActivity.class));
                     } else {
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                     }
                     finish();
                     break;

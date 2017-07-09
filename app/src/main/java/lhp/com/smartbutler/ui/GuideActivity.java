@@ -15,7 +15,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import lhp.com.smartbutler.MainActivity;
 import lhp.com.smartbutler.R;
 
 /**
@@ -119,7 +118,7 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.btn_start:
             case R.id.iv_back:
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, LoginActivity.class));
                 finish();
                 break;
         }
