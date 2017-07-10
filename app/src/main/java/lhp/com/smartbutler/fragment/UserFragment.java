@@ -4,16 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.entity.MyUser;
 import lhp.com.smartbutler.ui.LoginActivity;
@@ -92,11 +96,45 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                 break;
             //修改用户信息
             case R.id.btn_update_ok:
-                //todo 取值
-                //保存
-                //禁用控件
-                setEnable(false);
-                btnUpdateOk.setVisibility(View.GONE);
+                String username = etUsername.getText().toString().trim();
+                String age = etAge.getText().toString().trim();
+                String sex = etSex.getText().toString().trim();
+                String desc = etDesc.getText().toString().trim();
+
+                if (!TextUtils.isEmpty(username) & !TextUtils.isEmpty(age) & !TextUtils.isEmpty(sex)) {
+                    //更新用户
+                    MyUser user = new MyUser();
+                    user.setUsername(username);
+                    user.setAge(Integer.parseInt(age));
+                    if (sex.equals("男")) {
+                        user.setSex(true);
+                    } else {
+                        user.setSex(false);
+                    }
+
+                    if (!TextUtils.isEmpty(desc)) {
+                        user.setDesc(desc);
+                    } else {
+                        user.setDesc("这个人很懒，什么都没有留下");
+                    }
+                    BmobUser bmobUser = BmobUser.getCurrentUser();
+                    user.update(bmobUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                setEnable(false);
+                                btnUpdateOk.setVisibility(View.GONE);
+                                Toast.makeText(getActivity(), "修改成功", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(getActivity(), "修改失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(getActivity(), R.string.text_toast_empty, Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }
