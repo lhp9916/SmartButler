@@ -7,4 +7,5 @@
     <string name="text_two_input_not_consistent">两次输入密码不一致</string>
     <string name="reset_successfully">修改密码成功</string>
     <string name="reset_failed">修改密码失败</string>
+    <string name="text_now_login">正在登陆...</string>
 </resources>

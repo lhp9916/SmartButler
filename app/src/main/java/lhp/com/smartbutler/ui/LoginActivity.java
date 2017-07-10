@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +21,7 @@ import lhp.com.smartbutler.MainActivity;
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.entity.MyUser;
 import lhp.com.smartbutler.utils.ShareUtils;
+import lhp.com.smartbutler.view.CustomDialog;
 
 /**
  * Created by lhp on 2017/7/9.
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @InjectView(R.id.tv_forget)
     TextView tvForget;
 
+    private CustomDialog dialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
+        dialog = new CustomDialog(this, 200, 200, R.layout.dialog_loading, R.style.Theme_dialog, Gravity.CENTER, R.style.pop_anim_style);
+        //屏幕外点击无效
+        dialog.setCancelable(false);
+
         btnLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         tvForget.setOnClickListener(this);
@@ -72,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String name = etUser.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
                 if (!TextUtils.isEmpty(name) & !TextUtils.isEmpty(password)) {
+                    dialog.show();
                     //登录
                     final MyUser user = new MyUser();
                     user.setUsername(name);
@@ -79,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     user.login(new SaveListener<MyUser>() {
                         @Override
                         public void done(MyUser myUser, BmobException e) {
+                            dialog.dismiss();
                             if (e == null) {
                                 //判断邮箱是否验证
                                 if (user.getEmailVerified()) {
