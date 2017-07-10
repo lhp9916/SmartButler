@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -36,6 +37,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button btnLogin;
     @InjectView(R.id.cb_keepPassword)
     CheckBox cbKeepPassword;
+    @InjectView(R.id.tv_forget)
+    TextView tvForget;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         btnLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
+        tvForget.setOnClickListener(this);
 
         //设置选中状态
         boolean isChecked = ShareUtils.getBoolean(this, "keeppass", false);
@@ -91,6 +95,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     Toast.makeText(this, "用户名或密码不能为空", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.tv_forget:
+                startActivity(new Intent(this, ForgetPasswordActivity.class));
                 break;
         }
     }
