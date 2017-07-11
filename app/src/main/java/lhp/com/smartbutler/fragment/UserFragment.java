@@ -20,6 +20,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.entity.MyUser;
+import lhp.com.smartbutler.ui.CourierActivity;
 import lhp.com.smartbutler.ui.LoginActivity;
 
 /**
@@ -60,6 +61,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         btnExitUser.setOnClickListener(this);
         tvEditUser.setOnClickListener(this);
         btnUpdateOk.setOnClickListener(this);
+        tvCourier.setOnClickListener(this);
         //默认不可点击
         setEnable(false);
         //设置具体值
@@ -135,6 +137,10 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), R.string.text_toast_empty, Toast.LENGTH_SHORT).show();
                 }
 
+                break;
+            //物流查询
+            case R.id.tv_courier:
+                startActivity(new Intent(getActivity(), CourierActivity.class));
                 break;
         }
     }
