@@ -12,10 +12,19 @@ import android.widget.Toast;
 import com.kymjs.rxvolley.RxVolley;
 import com.kymjs.rxvolley.client.HttpCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import lhp.com.smartbutler.R;
-import lhp.com.smartbutler.utils.L;
+import lhp.com.smartbutler.adapter.CourierAdapter;
+import lhp.com.smartbutler.entity.CourierData;
 import lhp.com.smartbutler.utils.SecretKey;
 
 /**
@@ -32,6 +41,8 @@ public class CourierActivity extends BaseActivity implements View.OnClickListene
     ListView lvCourier;
     @InjectView(R.id.btn_get_courier)
     Button btnGetCourier;
+
+    private List<CourierData> mList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,13 +78,36 @@ public class CourierActivity extends BaseActivity implements View.OnClickListene
                     RxVolley.get(url, new HttpCallback() {
                         @Override
                         public void onSuccess(String t) {
-                            L.i(t);
+                            parsingJson(t);
                         }
                     });
                 } else {
                     Toast.makeText(this, R.string.text_toast_empty, Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    private void parsingJson(String t) {
+        try {
+            JSONObject jsonObject = new JSONObject(t);
+            JSONObject jsonResult = jsonObject.getJSONObject("result");
+            JSONArray jsonArray = jsonResult.getJSONArray("list");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json = (JSONObject) jsonArray.get(i);
+
+                CourierData data = new CourierData();
+                data.setDatetime(json.getString("datetime"));
+                data.setRemark(json.getString("remark"));
+                data.setZone(json.getString("zone"));
+                mList.add(data);
+            }
+            //倒序
+            Collections.reverse(mList);
+            CourierAdapter adapter = new CourierAdapter(this, mList);
+            lvCourier.setAdapter(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
