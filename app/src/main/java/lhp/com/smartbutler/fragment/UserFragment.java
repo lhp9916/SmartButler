@@ -1,6 +1,7 @@
 package lhp.com.smartbutler.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +31,7 @@ import lhp.com.smartbutler.entity.MyUser;
 import lhp.com.smartbutler.ui.CourierActivity;
 import lhp.com.smartbutler.ui.LoginActivity;
 import lhp.com.smartbutler.utils.L;
+import lhp.com.smartbutler.utils.UtilTools;
 import lhp.com.smartbutler.view.CustomDialog;
 
 /**
@@ -87,6 +89,8 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         btnUpdateOk.setOnClickListener(this);
         tvCourier.setOnClickListener(this);
         profileImage.setOnClickListener(this);
+
+        UtilTools.getImageFromShare(getActivity(), profileImage);
 
         dialog = new CustomDialog(getActivity(), 0, 0,
                 R.layout.dialog_photo, R.style.pop_anim_style, Gravity.BOTTOM, 0);
@@ -228,9 +232,25 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                     photoZoom(Uri.fromFile(tempFile));
                     break;
                 case RESULT_REQUEST_CODE:
-                    // TODO: 2017/7/12 选择性裁剪 
+                    if (data != null) {
+                        //设置图片到view
+                        setImageToView(data);
+                        //删除临时拍照图片
+                        if (tempFile != null) {
+                            tempFile.delete();
+                        }
+                    }
                     break;
             }
+        }
+
+    }
+
+    private void setImageToView(Intent data) {
+        Bundle bundle = data.getExtras();
+        if (bundle != null) {
+            Bitmap bitmap = bundle.getParcelable("data");
+            profileImage.setImageBitmap(bitmap);
         }
 
     }
@@ -260,6 +280,9 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        //保存头像
+        UtilTools.putImageToShare(getActivity(), profileImage);
+
         ButterKnife.reset(this);
     }
 
