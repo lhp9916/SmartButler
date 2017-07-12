@@ -1,7 +1,10 @@
 package lhp.com.smartbutler.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -14,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cn.bmob.v3.BmobUser;
@@ -24,6 +29,7 @@ import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.entity.MyUser;
 import lhp.com.smartbutler.ui.CourierActivity;
 import lhp.com.smartbutler.ui.LoginActivity;
+import lhp.com.smartbutler.utils.L;
 import lhp.com.smartbutler.view.CustomDialog;
 
 /**
@@ -59,6 +65,12 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     private Button btn_camera;
     private Button btn_picture;
     private Button btn_cancel;
+
+    private static final String PHOTO_IMAGE_FILE_NAME = "fileImg.jpg";
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int IMAGE_REQUEST_CODE = 101;
+    private static final int RESULT_REQUEST_CODE = 102;
+    private File tempFile = null;
 
     @Nullable
     @Override
@@ -177,11 +189,72 @@ public class UserFragment extends Fragment implements View.OnClickListener {
                 break;
             //拍照
             case R.id.btn_camera:
+                toCamera();
                 break;
             //相册
             case R.id.btn_picture:
+                toPicture();
                 break;
         }
+    }
+
+    //跳转相册
+    private void toPicture() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_REQUEST_CODE);
+        dialog.dismiss();
+    }
+
+    //跳转相机
+    private void toCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //判断内存卡是否可用，可用的话就进行存储
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(new File(Environment.getExternalStorageDirectory(), PHOTO_IMAGE_FILE_NAME)));
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        dialog.dismiss();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != getActivity().RESULT_CANCELED) {
+            switch (requestCode) {
+                case IMAGE_REQUEST_CODE:
+                    photoZoom(data.getData());
+                    break;
+                case CAMERA_REQUEST_CODE:
+                    tempFile = new File(Environment.getExternalStorageDirectory(), PHOTO_IMAGE_FILE_NAME);
+                    photoZoom(Uri.fromFile(tempFile));
+                    break;
+                case RESULT_REQUEST_CODE:
+                    // TODO: 2017/7/12 选择性裁剪 
+                    break;
+            }
+        }
+
+    }
+
+    //裁剪图像
+    private void photoZoom(Uri data) {
+        if (data == null) {
+            L.e("date is null");
+            return;
+        }
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(data, "image/*");
+        //设置裁剪
+        intent.putExtra("crop", "true");
+        //裁剪宽高比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        //裁剪图片的质量
+        intent.putExtra("outputX", 320);
+        intent.putExtra("outputY", 320);
+        //发送数据
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, RESULT_REQUEST_CODE);
+
     }
 
     @Override
