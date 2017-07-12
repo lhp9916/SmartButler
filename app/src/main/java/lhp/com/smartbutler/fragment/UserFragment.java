@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import butterknife.InjectView;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
+import de.hdodenhof.circleimageview.CircleImageView;
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.entity.MyUser;
 import lhp.com.smartbutler.ui.CourierActivity;
 import lhp.com.smartbutler.ui.LoginActivity;
+import lhp.com.smartbutler.view.CustomDialog;
 
 /**
  * Created by lhp on 2017/7/9.
@@ -47,6 +50,15 @@ public class UserFragment extends Fragment implements View.OnClickListener {
     TextView tvPhone;
     @InjectView(R.id.btn_exit_user)
     Button btnExitUser;
+    @InjectView(R.id.profile_image)
+    CircleImageView profileImage;
+    //圆形图像
+    private CircleImageView profile_image;
+    private CustomDialog dialog;
+
+    private Button btn_camera;
+    private Button btn_picture;
+    private Button btn_cancel;
 
     @Nullable
     @Override
@@ -62,6 +74,19 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         tvEditUser.setOnClickListener(this);
         btnUpdateOk.setOnClickListener(this);
         tvCourier.setOnClickListener(this);
+        profileImage.setOnClickListener(this);
+
+        dialog = new CustomDialog(getActivity(), 0, 0,
+                R.layout.dialog_photo, R.style.pop_anim_style, Gravity.BOTTOM, 0);
+        //屏幕外点击无效
+        dialog.setCancelable(false);
+        btn_camera = dialog.findViewById(R.id.btn_camera);
+        btn_camera.setOnClickListener(this);
+        btn_picture = dialog.findViewById(R.id.btn_picture);
+        btn_picture.setOnClickListener(this);
+        btn_cancel = dialog.findViewById(R.id.btn_cancel);
+        btn_cancel.setOnClickListener(this);
+
         //默认不可点击
         setEnable(false);
         //设置具体值
@@ -141,6 +166,20 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             //物流查询
             case R.id.tv_courier:
                 startActivity(new Intent(getActivity(), CourierActivity.class));
+                break;
+            //上传头像
+            case R.id.profile_image:
+                dialog.show();
+                break;
+            //取消按钮
+            case R.id.btn_cancel:
+                dialog.dismiss();
+                break;
+            //拍照
+            case R.id.btn_camera:
+                break;
+            //相册
+            case R.id.btn_picture:
                 break;
         }
     }

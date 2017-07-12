@@ -17,7 +17,7 @@ import lhp.com.smartbutler.R;
 public class CustomDialog extends Dialog {
     //定义模板
     public CustomDialog(@NonNull Context context, int layout, int style) {
-        this(context, WindowManager.LayoutParams.WRAP_CONTENT,
+        this(context, WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 layout, style, Gravity.CENTER);
     }
@@ -29,8 +29,8 @@ public class CustomDialog extends Dialog {
         setContentView(layout);
         Window window = getWindow();
         WindowManager.LayoutParams layoutParams = window.getAttributes();
-        layoutParams.width = width;
-        layoutParams.height = height;
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.gravity = gravity;
         window.setAttributes(layoutParams);
         window.setWindowAnimations(anim);
