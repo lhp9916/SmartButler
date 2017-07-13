@@ -30,6 +30,7 @@ import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.entity.MyUser;
 import lhp.com.smartbutler.ui.CourierActivity;
 import lhp.com.smartbutler.ui.LoginActivity;
+import lhp.com.smartbutler.ui.PhoneActivity;
 import lhp.com.smartbutler.utils.L;
 import lhp.com.smartbutler.utils.UtilTools;
 import lhp.com.smartbutler.view.CustomDialog;
@@ -88,6 +89,7 @@ public class UserFragment extends Fragment implements View.OnClickListener {
         tvEditUser.setOnClickListener(this);
         btnUpdateOk.setOnClickListener(this);
         tvCourier.setOnClickListener(this);
+        tvPhone.setOnClickListener(this);
         profileImage.setOnClickListener(this);
 
         UtilTools.getImageFromShare(getActivity(), profileImage);
@@ -198,6 +200,9 @@ public class UserFragment extends Fragment implements View.OnClickListener {
             //相册
             case R.id.btn_picture:
                 toPicture();
+                break;
+            case R.id.tv_phone:
+                startActivity(new Intent(getActivity(), PhoneActivity.class));
                 break;
         }
     }

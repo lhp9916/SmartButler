@@ -50,6 +50,8 @@
         <activity android:name=".ui.ForgetPasswordActivity" />
         <!--物流查询-->
         <activity android:name=".ui.CourierActivity" />
+        <!--归属地查询-->
+        <activity android:name=".ui.PhoneActivity" />
     </application>
 
 </manifest>
