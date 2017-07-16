@@ -1,11 +1,13 @@
 package lhp.com.smartbutler.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.kymjs.rxvolley.RxVolley;
@@ -21,6 +23,7 @@ import java.util.List;
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.adapter.WeChatAdapter;
 import lhp.com.smartbutler.entity.WeChatData;
+import lhp.com.smartbutler.ui.WebViewActivity;
 import lhp.com.smartbutler.utils.L;
 import lhp.com.smartbutler.utils.SecretKey;
 
@@ -32,6 +35,9 @@ public class WechatFragment extends Fragment {
 
     private ListView mListView;
     private List<WeChatData> mList = new ArrayList<>();
+
+    private List<String> mListTitle = new ArrayList<>();
+    private List<String> mListUrl = new ArrayList<>();
 
     @Nullable
     @Override
@@ -54,6 +60,17 @@ public class WechatFragment extends Fragment {
                 parsing(t);
             }
         });
+
+        //点击事件
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtra("title", mListTitle.get(position));
+                intent.putExtra("url", mListUrl.get(position));
+                startActivity(intent);
+            }
+        });
     }
 
     private void parsing(String t) {
@@ -68,6 +85,8 @@ public class WechatFragment extends Fragment {
                 data.setSource(json.getString("source"));
                 data.setImgUrl(json.getString("firstImg"));
                 mList.add(data);
+                mListTitle.add(json.getString("title"));
+                mListUrl.add(json.getString("url"));
                 WeChatAdapter adapter = new WeChatAdapter(getActivity(), mList);
                 mListView.setAdapter(adapter);
             }

@@ -52,6 +52,8 @@
         <activity android:name=".ui.CourierActivity" />
         <!--归属地查询-->
         <activity android:name=".ui.PhoneActivity" />
+        <!--新闻详情-->
+        <activity android:name=".ui.WebViewActivity" />
     </application>
 
 </manifest>
