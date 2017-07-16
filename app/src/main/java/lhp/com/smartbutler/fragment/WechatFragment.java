@@ -8,34 +8,73 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import com.kymjs.rxvolley.RxVolley;
+import com.kymjs.rxvolley.client.HttpCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import lhp.com.smartbutler.R;
+import lhp.com.smartbutler.adapter.WeChatAdapter;
+import lhp.com.smartbutler.entity.WeChatData;
+import lhp.com.smartbutler.utils.L;
+import lhp.com.smartbutler.utils.SecretKey;
 
 /**
  * Created by lhp on 2017/7/8.
  */
 
 public class WechatFragment extends Fragment {
-    @InjectView(R.id.mListView)
-    ListView mListView;
+
+    private ListView mListView;
+    private List<WeChatData> mList = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wechat, null);
-        ButterKnife.inject(this, view);
-        initView();
+
+        initView(view);
 
         return view;
     }
 
-    private void initView() {
+    private void initView(View view) {
+        mListView = view.findViewById(R.id.mListView);
+        //请求接口
+        String url = "http://v.juhe.cn/weixin/query?key=" + SecretKey.WECHAT_KEY;
+        RxVolley.get(url, new HttpCallback() {
+            @Override
+            public void onSuccess(String t) {
+                L.i(t);
+                parsing(t);
+            }
+        });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
+    private void parsing(String t) {
+        try {
+            JSONObject jsonObject = new JSONObject(t);
+            JSONObject jsonResult = jsonObject.getJSONObject("result");
+            JSONArray jsonArray = jsonResult.getJSONArray("list");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json = (JSONObject) jsonArray.get(i);
+                WeChatData data = new WeChatData();
+                data.setTitle(json.getString("title"));
+                data.setSource(json.getString("source"));
+                data.setImgUrl(json.getString("firstImg"));
+                mList.add(data);
+                WeChatAdapter adapter = new WeChatAdapter(getActivity(), mList);
+                mListView.setAdapter(adapter);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
+
 }
