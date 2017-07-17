@@ -24,7 +24,6 @@ import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.adapter.WeChatAdapter;
 import lhp.com.smartbutler.entity.WeChatData;
 import lhp.com.smartbutler.ui.WebViewActivity;
-import lhp.com.smartbutler.utils.L;
 import lhp.com.smartbutler.utils.SecretKey;
 
 /**
@@ -56,7 +55,7 @@ public class WechatFragment extends Fragment {
         RxVolley.get(url, new HttpCallback() {
             @Override
             public void onSuccess(String t) {
-                L.i(t);
+                //L.i(t);
                 parsing(t);
             }
         });
