@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.entity.WeChatData;
+import lhp.com.smartbutler.utils.PicassoUtils;
 
 /**
  * Created by lhp on 2017/7/16.
@@ -25,10 +27,18 @@ public class WeChatAdapter extends BaseAdapter {
     private List<WeChatData> mList;
     private WeChatData data;
 
+    //屏幕宽高
+    private int width, height;
+    private WindowManager wm;
+
     public WeChatAdapter(Context context, List<WeChatData> mList) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mList = mList;
+
+        wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        width = wm.getDefaultDisplay().getWidth();
+        height = wm.getDefaultDisplay().getHeight();
     }
 
     @Override
@@ -63,7 +73,7 @@ public class WeChatAdapter extends BaseAdapter {
         data = mList.get(i);
         viewHolder.tv_title.setText(data.getTitle());
         viewHolder.tv_source.setText(data.getSource());
-
+        PicassoUtils.loadImageViewSize(context, data.getImgUrl(), width / 3, 100, viewHolder.iv_img);
         return view;
     }
 
