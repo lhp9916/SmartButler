@@ -65,7 +65,7 @@ public class GirlFragment extends Fragment {
     private void initView() {
         dialog = new CustomDialog(getActivity(), LinearLayout.LayoutParams.MATCH_PARENT
                 , LinearLayout.LayoutParams.MATCH_PARENT, R.layout.dialog_girl,
-                R.style.pop_anim_style, Gravity.CENTER);
+                R.style.Theme_dialog, Gravity.CENTER, R.style.pop_anim_style);
         imageView = dialog.findViewById(R.id.iv_img);
 
         RxVolley.get(url, new HttpCallback() {
