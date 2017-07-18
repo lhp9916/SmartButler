@@ -23,6 +23,13 @@ android {
     }
 }
 
+//添加本地仓库
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -51,4 +58,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     //photoview
     compile 'com.github.chrisbanes:PhotoView:1.3.1'
+    compile files('libs/Msc.jar')
+    compile files('libs/Sunflower.jar')
 }
