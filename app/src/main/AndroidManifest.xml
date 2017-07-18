@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <!--获取手机录音机使用权限，听写、识别、语义理解需要用到此权限 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -69,6 +69,8 @@
         <activity android:name=".ui.PhoneActivity" />
         <!--新闻详情-->
         <activity android:name=".ui.WebViewActivity" />
+        <!--短信服务-->
+        <service android:name=".service.SmsService" />
     </application>
 
 </manifest>
