@@ -22,9 +22,11 @@ import butterknife.InjectView;
 import lhp.com.smartbutler.R;
 import lhp.com.smartbutler.utils.L;
 
+import static lhp.com.smartbutler.R.id.number_progress_bar;
+
 /**
  * Created by lhp on 2017/7/19.
- * description: 更新
+ * description: 下载更新
  */
 
 public class UpdateActivity extends BaseActivity {
@@ -37,6 +39,8 @@ public class UpdateActivity extends BaseActivity {
 
     @InjectView(R.id.tv_size)
     TextView tvSize;
+    @InjectView(number_progress_bar)
+    com.daimajia.numberprogressbar.NumberProgressBar numberProgressBar;
 
     private String url;
     private String path;
@@ -50,6 +54,10 @@ public class UpdateActivity extends BaseActivity {
                     long transferredBytes = bundle.getLong("transferredBytes");
                     long totalSize = bundle.getLong("totalSize");
                     tvSize.setText(transferredBytes + "/" + totalSize);
+
+                    //设置进度
+                    numberProgressBar.setProgress((int) (((float) transferredBytes / (float) totalSize) * 100));
+
                     break;
                 case HANDLER_OK:
                     startInstallApk();
@@ -71,6 +79,8 @@ public class UpdateActivity extends BaseActivity {
     }
 
     private void initView() {
+        numberProgressBar.setMax(100);
+
         url = getIntent().getStringExtra("url");
 
         path = FileUtils.getSDCardPath() + "/" + System.currentTimeMillis() + ".apk";
