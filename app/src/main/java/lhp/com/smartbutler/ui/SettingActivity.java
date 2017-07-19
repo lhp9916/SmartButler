@@ -39,6 +39,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private String versionName;
     private int versionCode;
+    private String url;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +102,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             JSONObject jsonObject = new JSONObject(json);
             int code = jsonObject.getInt("versionCode");
             String content = jsonObject.getString("content");
+            url = jsonObject.getString("url");
             if (code > versionCode) {
                 showUpdateDialog(content);
             } else {
@@ -124,7 +126,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 .setPositiveButton("更新", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivity(new Intent(SettingActivity.this, UpdateActivity.class));
+                        Intent intent = new Intent(SettingActivity.this, UpdateActivity.class);
+                        intent.putExtra("url", url);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
