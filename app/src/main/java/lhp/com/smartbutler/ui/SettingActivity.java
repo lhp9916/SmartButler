@@ -41,6 +41,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     LinearLayout llScan;
     @InjectView(R.id.ll_qr_code)
     LinearLayout llQrCode;
+    @InjectView(R.id.ll_about)
+    LinearLayout llAbout;
 
     private String versionName;
     private int versionCode;
@@ -61,6 +63,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         llUpdate.setOnClickListener(this);
         llScan.setOnClickListener(this);
         llQrCode.setOnClickListener(this);
+        llAbout.setOnClickListener(this);
         //设置选中状态
         switchTts.setChecked(ShareUtils.getBoolean(this, "isSpeak", false));
         swSms.setChecked(ShareUtils.getBoolean(this, "isSms", false));
@@ -107,7 +110,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 startActivityForResult(openCameraIntent, 0);
                 break;
             case R.id.ll_qr_code:
-                startActivity(new Intent(this,QrCodeActivity.class));
+                startActivity(new Intent(this, QrCodeActivity.class));
+                break;
+            case R.id.ll_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
     }

@@ -1,6 +1,8 @@
 package lhp.com.smartbutler.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -57,6 +59,17 @@ public class UtilTools {
             //生成bitmap
             Bitmap bitmap = BitmapFactory.decodeStream(byStream);
             imageView.setImageBitmap(bitmap);
+        }
+    }
+
+    //获取版本号
+    public static String getVersion(Context mContext){
+        PackageManager pm = mContext.getPackageManager();
+        try {
+            PackageInfo info = pm.getPackageInfo(mContext.getPackageName(),0);
+            return info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "未知";
         }
     }
 }
