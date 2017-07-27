@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.kymjs.rxvolley.RxVolley;
 import com.kymjs.rxvolley.client.HttpCallback;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     LinearLayout llUpdate;
     @InjectView(R.id.tv_version)
     TextView tvVersion;
+    @InjectView(R.id.ll_scan)
+    LinearLayout llScan;
+    @InjectView(R.id.ll_qr_code)
+    LinearLayout llQrCode;
 
     private String versionName;
     private int versionCode;
@@ -54,6 +59,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         switchTts.setOnClickListener(this);
         swSms.setOnClickListener(this);
         llUpdate.setOnClickListener(this);
+        llScan.setOnClickListener(this);
+        llQrCode.setOnClickListener(this);
         //设置选中状态
         switchTts.setChecked(ShareUtils.getBoolean(this, "isSpeak", false));
         swSms.setChecked(ShareUtils.getBoolean(this, "isSms", false));
@@ -93,6 +100,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         parsingJson(t);
                     }
                 });
+                break;
+            case R.id.ll_scan:
+                //打开扫描界面扫描条形码或二维码
+                Intent openCameraIntent = new Intent(this, CaptureActivity.class);
+                startActivityForResult(openCameraIntent, 0);
+                break;
+            case R.id.ll_qr_code:
+                startActivity(new Intent(this,QrCodeActivity.class));
                 break;
         }
     }
@@ -145,5 +160,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         PackageInfo info = pm.getPackageInfo(getPackageName(), 0);
         versionName = info.versionName;
         versionCode = info.versionCode;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            String scanResult = bundle.getString("result");
+            Toast.makeText(this, scanResult, Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -75,6 +75,10 @@
         <activity
             android:name=".ui.UpdateActivity"
             android:label="下载更新" />
+        <!--生成二维码-->
+        <activity
+            android:name=".ui.QrCodeActivity"
+            android:label="我的二维码" />
     </application>
 
 </manifest>
